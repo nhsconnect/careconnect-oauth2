@@ -1,0 +1,9 @@
+{
+  "realm": "fhir",
+  "auth-server-url": "http://localhost:8080/auth",
+  "ssl-required": "external",
+  "resource" : "ccri-auth",
+  "credentials": {
+    "secret": "f39fd5b4-9bef-4574-a38c-5d460cf2c6a9"
+  }
+}

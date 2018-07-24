@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2015 The MITRE Corporation 
+    and the MIT Kerberos and Internet Trust Consortium
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+    http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2-2.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		">
+
+    <!-- Alias x3 so there's just *one* bean that auto-wires to the various
+         consumers that want it, even though those consumers each call it by a different
+         name... -->
+    <bean id="oAuth2RequestFactory" class="org.smartplatforms.oauth2.SmartOAuth2RequestFactory"
+          name="authRequestFactory, requestFactory"/>
+
+    <oauth:authorization-server
+            client-details-service-ref="defaultOAuth2ClientDetailsEntityService"
+            authorization-request-manager-ref="oAuth2RequestFactory"
+            token-services-ref="defaultOAuth2ProviderTokenService"
+            user-approval-handler-ref="smartUserApprovalHandler"
+            request-validator-ref="oauthRequestValidator"
+            redirect-resolver-ref="blacklistAwareRedirectResolver"
+            authorization-endpoint-url="/authorize"
+            token-endpoint-url="/token"
+            error-page="/error">
+
+        <oauth:authorization-code authorization-code-services-ref="defaultOAuth2AuthorizationCodeService"/>
+        <oauth:implicit/>
+        <oauth:refresh-token/>
+        <oauth:client-credentials/>
+        <oauth:custom-grant token-granter-ref="chainedTokenGranter"/>
+        <oauth:custom-grant token-granter-ref="jwtAssertionTokenGranter"/>
+
+    </oauth:authorization-server>
+
+    <bean id="tokenEnhancer" class="org.smartplatforms.oauth2.SmartLaunchTokenEnhancer"/>
+
+    <bean id="oauthAccessDeniedHandler"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler"/>
+
+    <bean id="launchContextHolder" class="org.hspconsortium.platform.authorization.launchcontext.InMemoryLaunchContextHolder" />
+
+    <bean id="smartLaunchContextResolver" class="org.smartplatforms.oauth2.SmartLaunchContextResolver">
+        <property name="fhirEndpoint" value="${CONTEXT_FHIR_ENDPOINT}"/>
+        <property name="resolveEndpoint" value="${CONTEXT_RESOLVE_ENDPOINT}"/>
+        <property name="username" value="${CONTEXT_USERNAME:client}"/>
+        <property name="password" value="${CONTEXT_PASSWORD:secret}"/>
+        <property name="launchContextHolder" ref="launchContextHolder" />
+    </bean>
+
+    <bean id="oauth2AuthorizationEndpoint" class="org.smartplatforms.oauth2.SmartAuthorizationEndpoint">
+        <property name="tokenGranter" ref="oauth2TokenGranter"/>
+        <property name="clientDetailsService" ref="defaultOAuth2ClientDetailsEntityService"/>
+        <property name="oAuth2RequestFactory" ref="oAuth2RequestFactory"/>
+        <property name="userApprovalHandler" ref="smartUserApprovalHandler"/>
+        <property name="oAuth2RequestValidator" ref="oauthRequestValidator"/>
+        <property name="authorizationCodeServices" ref="defaultOAuth2AuthorizationCodeService"/>
+    </bean>
+
+    <!-- Error page handler. -->
+    <mvc:view-controller path="/error" view-name="error"/>
+
+</beans>

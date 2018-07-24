@@ -1,0 +1,41 @@
+version: 1
+
+dn: cn=admin,ou=admins,dc=hspconsortium,dc=org
+changetype: delete
+
+dn: cn=demo,ou=admins,dc=hspconsortium,dc=org
+changetype: delete
+
+dn: cn=admin,ou=admins,dc=hspconsortium,dc=org
+objectClass: simpleSecurityObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: top
+objectClass: pwmUser
+cn: admin
+sn: User
+userPassword:password
+displayName: Admin User
+givenName: Admin
+mail: support@hspconsortium.org
+uid: admin
+
+dn: cn=demo,ou=admins,dc=hspconsortium,dc=org
+objectClass: simpleSecurityObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: top
+objectClass: pwmUser
+cn: demo
+sn: User
+userPassword:demo
+labeledURI: https://api.hspconsortium.org/hspc/data/P
+ ractitioner/demo/_history/1
+userPassword:: e1NTSEF9QnVhcG9HR0tJZGZHcHJmTUZqajNOOUk3TGppUzI0WDUzTmd4QlE9P
+ Q==
+displayName: Demo User
+givenName: Demo
+mail: support_demo@hspconsortium.org
+uid: demo

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2015. Healthcare Services Platform Consortium. All Rights Reserved. -->
+<!--
+  Copyright 2014 The MITRE Corporation 
+    and the MIT Kerberos and Internet Trust Consortium
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+    http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       						http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+       						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+    <!--  The following is for connecting to a MySQL database that has been initialized with
+             src/main/resources/db/tables/mysql_database_tables.sql -->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" primary="true" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="url" value="${oidc.datasource.postgresql.url}" />
+        <property name="username" value="${oidc.datasource.postgresql.username}" />
+        <property name="password" value="${oidc.datasource.postgresql.password}" />
+    </bean>
+
+    <bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
+        <property name="databasePlatform" value="org.eclipse.persistence.platform.database.PostgreSQLPlatform" />
+        <property name="showSql" value="false" />
+    </bean>
+
+    <!-- Flyway configuration -->
+    <bean id="flyway" class="org.flywaydb.core.Flyway" init-method="migrate">
+        <property name="baselineOnMigrate" value="true" />
+        <property name="schemas" value="${oidc.datasource.postgresql.schema}" />
+        <property name="dataSource" ref="dataSource" />
+
+    </bean>
+
+</beans>

@@ -1,0 +1,69 @@
+version: 1
+
+dn: dc=hspconsortium,dc=org
+changetype: modify
+add: administrativeRole
+administrativeRole: accessControlSpecificArea
+
+dn: ou=users,dc=hspconsortium,dc=org
+objectClass: organizationalUnit
+objectClass: top
+ou: users
+description: Container for hspc self service users
+
+dn: 2.5.4.3=allowselfaccessandmodification,dc=hspconsortium,dc=org
+objectClass: subentry
+objectClass: accessControlSubentry
+objectClass: top
+cn: allowSelfAccessAndModification
+prescriptiveACI: { identificationTag "allowSelfAccessAndModification", precedence 14, authenticationLevel none, itemOrUserFirst userFirst: { userClasses { thisEntry }, userPermissions { { protectedItems { allUserAttributeTypesAndValues }, grantsAndDenials { grantAdd, grantRemove } }, { protectedItems { entry }, grantsAndDenials { grantReturnDN, grantModify, grantRead, grantBrowse, grantFilterMatch } } } } }
+subtreeSpecification: { base "ou=users" }
+
+dn: ou=admins,dc=hspconsortium,dc=org
+objectClass: organizationalUnit
+objectClass: top
+ou: admins
+description: Container for hspc admins
+
+dn: cn=admin,ou=admins,dc=hspconsortium,dc=org
+objectClass: simpleSecurityObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: top
+objectClass: pwmUser
+cn: admin
+sn: User
+userPassword:password
+displayName: Admin User
+givenName: Admin
+mail: support@hspconsortium.org
+uid: admin
+
+dn: cn=demo,ou=admins,dc=hspconsortium,dc=org
+objectClass: simpleSecurityObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: top
+objectClass: pwmUser
+cn: demo
+sn: User
+userPassword:demo
+displayName: Demo User
+givenName: Demo
+mail: support_demo@hspconsortium.org
+uid: demo
+
+dn: cn=test,ou=users,dc=hspconsortium,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: pwmUser
+cn: test
+sn: User
+pwmGUID: 8646f4f0-2bca-4319-8d78-6c773d89fa29
+uid: test
+userPassword:test
+

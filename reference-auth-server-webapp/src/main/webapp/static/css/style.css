@@ -1,0 +1,183 @@
+/*
+ * Password Management Servlets (PWM)
+ * http://code.google.com/p/pwm/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+#header {
+    color: #58585A;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #fafafa;
+    background-image: linear-gradient(to bottom, #ffffff, #ffffff);
+    width: 100%;
+    height: 80px;
+    top: 30px;
+    margin: 0;
+    border: 0px solid #f2f2f2;
+}
+
+#header-center-left {
+    background-image: url('company-logo-main-web-top.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    color: #ffffff;
+    width: 325px;
+    height: 55px;
+    z-index: 1;
+}
+
+#header-page {
+    margin: auto;
+    font-size: 0px;
+    font-weight: bold;
+    color: #58585A;
+    position: static;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+#header-title {
+    margin: auto;
+    font-size: 0px;
+    font-weight: bold;
+    color: #58585A;
+    position: absolute;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+#centerbody {
+    padding: 10px 10px 10px 10px;
+    border: solid 0px #58585A;
+    top : 10px;
+    border-radius: 5px;
+    display: block;
+    line-height: 1.428571429;
+    color: #58585A;
+    background-color: #ffffff;
+    background-image: none;
+    margin: auto;
+    font-size: 12px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.pwm-form {
+    width: 500px;
+    /*margin: 200px auto 0 auto;*/
+}
+
+.formFieldLabel {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.formFieldWrapper {
+    padding-bottom: 0px;
+}
+
+.message {
+    background-color: #eeeeee;
+}
+
+.message-info {
+    background-color: #b6ccdb;
+}
+
+.message-error {
+    background-color: #ffcccc;
+}
+
+.message-success {
+    background-color: #70c1f9;
+}
+
+.menubutton {
+    white-space: normal;
+}
+
+#password1 {
+    color: #58585A;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+
+.inputfield {
+    width: 450px;
+    display: block;
+    min-height: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 2px 4px 0 5px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #58585A;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    /*margin-bottom: 2px;*/
+}
+
+.changepasswordfield {
+    width: 450px;
+    display: block;
+    min-height: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 2px 4px 0 5px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #58585A;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    margin-bottom: 2px;
+}
+
+.buttonbar {
+    margin-top: 0px;
+    width: 100%;
+    margin-bottom: 0px;
+    text-align: center;
+}
+
+.btn {
+    height: 30px;
+    font-weight:bold;
+    color: #fff;
+    background-color: #00a7e6;
+    background-image: none;
+    border-color:  #00a7e6;
+    border: 1px solid #00AEEF;
+    border-radius: 3px;
+    cursor: pointer;
+}.btn:disabled {
+     color: #9e9e9e;
+ }.btn:hover {
+      color: #58585A;
+      background-color: #00a7e6;
+      cursor: pointer;
+  }

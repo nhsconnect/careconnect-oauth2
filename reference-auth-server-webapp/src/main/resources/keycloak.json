@@ -1,0 +1,9 @@
+{
+  "realm": "fhir",
+  "auth-server-url": "https://enterprisearchitecture-test.digital.nhs.uk/auth",
+  "ssl-required": "external",
+  "resource" : "ccri-auth",
+  "credentials": {
+    "secret": "bd4eeaf5-71db-470b-84a4-30a535ad6d48"
+  }
+}

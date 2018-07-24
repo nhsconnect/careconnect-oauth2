@@ -1,0 +1,58 @@
+version: '3'
+services:
+
+  oauthsql:
+    container_name: oauthsql
+    image: mysql:5.7.20
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=oic
+      - MYSQL_USER=${MYSQL_DB_USER}
+      - MYSQL_PASSWORD=${MYSQL_DB_PASSWORD}
+      - timezone=+0:00
+      - default-time-zone=+0:00
+    ports:
+      - 3306:3306
+    networks:
+      - oauth_net
+
+  oauthldap:
+    container_name: oauth_ldap
+    image: rschaeuble/openldap-server:latest
+    environment:
+      - LDAP_DOMAIN=ccri.com
+      - LDAP_ORGANIZATION=CCRI
+      - LDAP_ADMIN_PASSWORD=admin
+    ports:
+      - 389:389
+    networks:
+      - oauth_net
+
+  oauthserver:
+    container_name: ccri_oauth_server
+    build: reference-auth-server-webapp
+    image: thorlogic/ccri-oauthserver:${CRRI_OAUTH_VERSION}
+    environment:
+      - oidc.issuer=${OAUTH_SERVER_URL}
+      - ldap.url=ldap://oauthldap:${LDAP_PORT}
+      - ldap.server=ldap://oauthldap:${LDAP_PORT}/dc=ccri,dc=com
+      - oidc.datasource.postgresql.schema=
+      - oidc.datasource.postgresql.database=oic
+      - oidc.datasource.postgresql.url=jdbc:postgresql://oauthsql:3306/oic
+      - JAVA_OPTIONS=-Dspring.profiles.active=local,users-ldap,docker
+    ports:
+      - 8080:8080
+    depends_on:
+      - oauthldap
+      - oauthsql
+    networks:
+      - oauth_net
+
+volumes:
+  openldapdata:
+
+networks:
+  oauth_net:
+    driver: bridge
+    ipam:
+      driver: default

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Authorize</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+
+    <script>
+        var username = decodeURIComponent(getParameterByName('username'));
+        var password = decodeURIComponent(getParameterByName('password'));
+        var redirect = decodeURIComponent(getParameterByName('redirect'));
+
+        if (username !== undefined && username !== "" && password !== undefined  && password !== "") {
+            if (!window.location.origin) {
+                window.location.origin = window.location.protocol + "//"
+                        + window.location.hostname
+                        + (window.location.port ? ':' + window.location.port: '');
+            }
+
+            var thisUri = window.location.origin + window.location.pathname;
+            var thisUrl = thisUri.replace(/\/+$/, "/");
+            var authUrl = thisUrl.replace("static/auth/index.html", "authenticate");
+
+            $.ajax({
+                url: authUrl,
+                type: "POST",
+                data: JSON.stringify(
+                        {
+                            username: username,
+                            password: password
+                        }),
+                contentType: "application/json"
+            }).done(function() {
+                if (redirect !== undefined && redirect !== "") {
+                    window.location = redirect;
+                }
+            }).fail(function() {
+                if (redirect !== undefined && redirect !== "") {
+                    window.location = redirect;
+                }
+            });
+        }
+
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+    </script>
+</head>
+
+<body>
+Authorizing...
+</body>
+</html>

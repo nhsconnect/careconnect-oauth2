@@ -1,0 +1,107 @@
+<!--
+  Copyright 2014 The MITRE Corporation
+    and the MIT Kerberos and Internet Trust Consortium
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+  <!-- LDAP User Info -->
+
+  <bean id="ldapUserInfoRepository" primary="true" class="org.hspconsortium.platform.authorization.repository.impl.LdapUserInfoRepository">
+    <property name="ldapTemplate" ref="ldapTemplate"/>
+  </bean>
+
+  <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+    <constructor-arg name="contextSource" ref="contextSource"/>
+  </bean>
+
+  <!-- end LDAP User Info -->
+  <!-- LDAP -->
+
+  <security:authentication-manager id="ldapAuthenticationManager" alias="ldapAuthenticationManager">
+    <security:authentication-provider ref="ldapAuthProvider" />
+  </security:authentication-manager>
+
+  <bean id="contextSource" class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+    <constructor-arg value="${ldap.server}"/>
+    <property name="userDn" value="${ldap.userDn}"/>
+    <property name="password" value="${ldap.password}"/>
+  </bean>
+
+  <bean id="ldapAuthProvider" class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+    <constructor-arg>
+      <bean class="org.springframework.security.ldap.authentication.BindAuthenticator">
+        <constructor-arg ref="contextSource"/>
+        <property name="userSearch">
+          <bean id="userSearch" class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
+            <!--<constructor-arg index="0" value="${ldap.base}"/>-->
+            <constructor-arg index="0" value=""/>
+            <constructor-arg index="1" value="(uid={0})"/>
+            <constructor-arg index="2" ref="contextSource"/>
+          </bean>
+        </property>
+      </bean>
+    </constructor-arg>
+    <constructor-arg>
+      <bean class="org.hspconsortium.platform.authorization.userdetails.MappedLdapAuthoritiesPopulator"/>
+    </constructor-arg>
+  </bean>
+
+  <!-- used by MappedLdapAuthoritiesPopulator -->
+  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <constructor-arg ref="dataSource"/>
+  </bean>
+
+  <!-- end LDAP -->
+
+  <mvc:view-controller path="/login" view-name="login-ldap" />
+
+  <bean id="promptFilter" class="org.mitre.openid.connect.filter.AuthorizationRequestFilter"/>
+
+  <security:http pattern="/login**" use-expressions="true" entry-point-ref="http403EntryPoint">
+    <security:intercept-url pattern="/login**" access="permitAll"/>
+    <security:csrf disabled="true"/>
+  </security:http>
+
+  <bean id="logoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+    <property name="targetUrlParameter" value="${LOGOUT_SUCCESS_URL_PROPERTY}"/>
+  </bean>
+
+  <security:http authentication-manager-ref="ldapAuthenticationManager" disable-url-rewriting="true" use-expressions="true" security-context-repository-ref="personaSessionRepo">
+    <security:form-login login-page="/login" login-processing-url="/auth/j_spring_security_check" authentication-failure-url="/login?error=failure"
+                         authentication-success-handler-ref="authenticationTimeStamper"/>
+    <security:intercept-url pattern="/**" access="permitAll"/>
+    <security:custom-filter ref="authRequestFilter" after="SECURITY_CONTEXT_FILTER" />
+    <security:logout logout-url="/logout" success-handler-ref="logoutSuccessHandler"/>
+    <security:anonymous/>
+    <security:expression-handler ref="oauthWebExpressionHandler"/>
+    <security:headers>
+      <security:frame-options policy="DENY"/>
+    </security:headers>
+    <security:csrf disabled="true"/>
+  </security:http>
+
+  <bean id="personaSessionRepo" class="org.hspconsortium.platform.authentication.persona.PersonaHttpSessionSecurityContextRepository"/>
+
+  <mvc:view-controller path="/createaccount" view-name="createaccount-ldap" />
+
+</beans>
