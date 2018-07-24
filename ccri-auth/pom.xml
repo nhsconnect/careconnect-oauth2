@@ -10,10 +10,10 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>ccri-reference-auth-server-webapp</artifactId>
+  <artifactId>ccri-auth</artifactId>
   <packaging>war</packaging>
 
-  <name>Reference Auth - Web App</name>
+  <name>ccri-auth</name>
   <description>Artifacts for creating an HSPC compliant authorization server web app</description>
 
   <dependencies>

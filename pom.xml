@@ -33,7 +33,7 @@
 
     <modules>
         <module>reference-auth-security</module>
-        <module>reference-auth-server-webapp</module>
+        <module>ccri-auth</module>
     </modules>
 
     <dependencyManagement>
