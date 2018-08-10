@@ -9,4 +9,4 @@
 
 
 FROM jetty:9.4-jre8-alpine
-ADD reference-auth-server-webapp/target/hspc-reference-auth-server-webapp-*.war /var/lib/jetty/webapps/ROOT.war
+ADD ccri-auth/target/ccri-*.war /var/lib/jetty/webapps/ROOT.war
