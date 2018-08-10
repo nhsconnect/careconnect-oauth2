@@ -30,7 +30,7 @@ services:
 
   oauthserver:
     container_name: ccri_oauth_server
-    build: reference-auth-server-webapp
+    build: ccri-auth
     image: thorlogic/ccri-oauthserver:${CRRI_OAUTH_VERSION}
     environment:
       - oidc.issuer=${OAUTH_SERVER_URL}
