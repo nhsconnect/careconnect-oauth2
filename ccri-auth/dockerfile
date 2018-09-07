@@ -6,4 +6,4 @@
 #ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Dspring.profiles.active=local,users-ldap -jar jetty-runner.jar --config jetty.xml app.war" ]
 
 FROM jetty:9.4-jre8-alpine
-ADD target/ccri-reference-auth-server-webapp-*.war /var/lib/jetty/webapps/ROOT.war
+ADD target/ccri-auth-*.war /var/lib/jetty/webapps/ROOT.war
