@@ -15,9 +15,9 @@ services:
 
   oauthserver:
     container_name: ccri_oauth_server
-    image: thorlogic/ccri-oauthserver:${CRRI_OAUTH_VERSION}
+    image: thorlogic/ccri-oauthserver
     environment:
-    - oidc.issuer=
+    - oidc.issuer=http://localhost:20080/ccri-auth/
     - ldap.url=
     - ldap.server=
     - oidc.datasource.mysql.schema=oic
