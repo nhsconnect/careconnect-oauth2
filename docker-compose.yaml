@@ -17,9 +17,9 @@ services:
     container_name: ccri_oauth_server
     image: thorlogic/ccri-oauthserver:${CRRI_OAUTH_VERSION}
     environment:
-    - oidc.issuer=v
-    - ldap.url=ldap://oauthldap:${LDAP_PORT}
-    - ldap.server=ldap://oauthldap:${LDAP_PORT}/dc=ccri,dc=com
+    - oidc.issuer=
+    - ldap.url=
+    - ldap.server=
     - oidc.datasource.mysql.schema=oic
     - oidc.datasource.mysql.url=jdbc:postgresql://oauthsql:5432/oic
     - JAVA_OPTIONS=-Dspring.profiles.active=local,users-keycloak,docker-purple

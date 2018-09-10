@@ -150,9 +150,9 @@
   </security:http>
 
   <!-- Allow open access to all static resources -->
-  <security:http pattern="/auth/resources/**" use-expressions="true" entry-point-ref="http403EntryPoint"
+  <security:http pattern="/ccri-auth/resources/**" use-expressions="true" entry-point-ref="http403EntryPoint"
                  create-session="stateless">
-    <security:intercept-url pattern="/auth/resources/**" access="permitAll"/>
+    <security:intercept-url pattern="/ccri-auth/resources/**" access="permitAll"/>
     <security:custom-filter ref="corsFilter" after="SECURITY_CONTEXT_FILTER"/>
     <security:csrf disabled="true"/>
   </security:http>

@@ -179,6 +179,7 @@
   </dependencies>
 
   <build>
+    <finalName>ccri-auth</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -209,6 +210,7 @@
         <configuration>
           <jettyXml>src/main/resources/jetty.xml</jettyXml>
           <webAppConfig>
+            <contextPath>/ccri-auth</contextPath>
             <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
           </webAppConfig>
         </configuration>
