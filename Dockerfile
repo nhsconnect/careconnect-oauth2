@@ -9,4 +9,4 @@
 
 
 FROM jetty:9.4-jre8-alpine
-ADD ccri-auth/target/ccri-*.war /var/lib/jetty/webapps/ROOT.war
+ADD ccri-auth/target/ccri-*.war /var/lib/jetty/webapps/ccri-auth.war

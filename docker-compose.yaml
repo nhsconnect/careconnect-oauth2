@@ -3,53 +3,32 @@ services:
 
   oauthsql:
     container_name: oauthsql
-    image: mysql:5.7.20
+    image: postgres:10.4
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=oic
-      - MYSQL_USER=${MYSQL_DB_USER}
-      - MYSQL_PASSWORD=${MYSQL_DB_PASSWORD}
-      - timezone=+0:00
-      - default-time-zone=+0:00
+    - POSTGRES_DB=oic
+    - POSTGRES_USER=root
+    - POSTGRES_PASSWORD=password
     ports:
-      - 3306:3306
+    - 3306:3306
     networks:
-      - oauth_net
-
-  oauthldap:
-    container_name: oauth_ldap
-    image: rschaeuble/openldap-server:latest
-    environment:
-      - LDAP_DOMAIN=ccri.com
-      - LDAP_ORGANIZATION=CCRI
-      - LDAP_ADMIN_PASSWORD=admin
-    ports:
-      - 389:389
-    networks:
-      - oauth_net
+    - oauth_net
 
   oauthserver:
     container_name: ccri_oauth_server
-    build: ccri-auth
-    image: thorlogic/ccri-oauthserver:${CRRI_OAUTH_VERSION}
+    image: thorlogic/ccri-oauthserver
     environment:
-      - oidc.issuer=${OAUTH_SERVER_URL}
-      - ldap.url=ldap://oauthldap:${LDAP_PORT}
-      - ldap.server=ldap://oauthldap:${LDAP_PORT}/dc=ccri,dc=com
-      - oidc.datasource.postgresql.schema=
-      - oidc.datasource.postgresql.database=oic
-      - oidc.datasource.postgresql.url=jdbc:postgresql://oauthsql:3306/oic
-      - JAVA_OPTIONS=-Dspring.profiles.active=local,users-ldap,docker
+    - oidc.issuer=http://localhost:20080/ccri-auth/
+    - ldap.url=
+    - ldap.server=
+    - oidc.datasource.mysql.schema=oic
+    - oidc.datasource.mysql.url=jdbc:postgresql://oauthsql:5432/oic
+    - JAVA_OPTIONS=-Dspring.profiles.active=local,users-keycloak,docker-purple
     ports:
-      - 8080:8080
+    - 20080:8080
     depends_on:
-      - oauthldap
-      - oauthsql
+    - oauthsql
     networks:
-      - oauth_net
-
-volumes:
-  openldapdata:
+    - oauth_net
 
 networks:
   oauth_net:
