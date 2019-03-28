@@ -30,7 +30,7 @@ public class SmartLaunchContextResolver implements LaunchContextResolver {
 		log.info("KGM launchId = " + launchId);
 		if (needs != null) log.info("Needs "+needs.toString());
 		LaunchContext launchContext = launchContextHolder.getLaunchContext(launchId);
-		if (launchContext == null) {
+		if (launchContext == null || launchContext.getParams() == null) {
 			log.warn("LaunchContext not found ");
 		}
 		HashMap<String,String> params = new HashMap<>();
